@@ -1,5 +1,12 @@
 // 主要核心入口
 
-module.exports = (request, response) => {
-    response.end("string")
+class App {
+    constructor() {
+
+    }
+    initServer(request, response){
+        response.end("hello world!")
+    }
 }
+
+module.exports = App
