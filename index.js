@@ -3,10 +3,11 @@
 const http = require("http")
 
 
-http.createServer(function (request, response) {
+http.createServer( (request, response) => {
+    
+    response.write("1 2 3")
+    response.end("<br>hello world!")
 
-    response.end("hello world!")
-
-}).listen(7000, function () {
+}).listen(7000,  () => {
     console.log("监听成功")
 });
