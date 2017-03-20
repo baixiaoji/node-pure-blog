@@ -4,4 +4,5 @@
 // 文件模块
 
 var other = require('./test')
-console.log(other)
+var package = require("./package")
+console.log(package)
