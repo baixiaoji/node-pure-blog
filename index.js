@@ -1,8 +1,12 @@
 
+// const 常量
+const http = require("http")
 
-// 核心模块
-// 文件模块
 
-var other = require('./test')
-var package = require("./package")  // .js .json .node 顺序
-console.log(module.paths)
+http.createServer(function (request, response) {
+
+    response.end("hello world!")
+
+}).listen(7000, function () {
+    console.log("监听成功")
+});
