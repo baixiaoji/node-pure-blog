@@ -14,12 +14,9 @@ let getPath = (url) => {
 
 
 let staticFunc = (url) => {
-    let map = {
-        "/": "/index.html",
-        "about": "/about.html",
-        "/list": "/list.html"
+    if (url == "/") {
+        url = "/index.html"
     }
-    url = map[url] || url 
     let _path = getPath(url);
 
     let body = "";
