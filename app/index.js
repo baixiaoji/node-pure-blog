@@ -21,8 +21,13 @@ class App {
                     url = "/index.html"
                 }
                 let _path = getPath(url);
-                fs.readFile(_path,"utf-8",(err,data)=>{
-                    response.end(data)
+                fs.readFile(_path,"binary",(err,data)=>{
+                    if(err){
+                        data = "NOT FOUND"
+                    }
+                    // 读取 和 发送的编码格式要一致  也可以默认不行  会自动处理
+                    // response 继承了 流 stream
+                    response.end(data,"binary")
                 })
             }
             staticFunc(url)
