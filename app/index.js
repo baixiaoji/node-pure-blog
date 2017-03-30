@@ -18,20 +18,23 @@ class App {
             // DRY
             // 返回的字符串或buffer
             let body = "";
-            let headers = {} ;
-            if(url.match("action")){
-                body = JSON.stringify( apiServer(url) )
+            let headers = {};
+            if (url.match("action")) {
+                body = JSON.stringify(apiServer(url))
                 headers = {
-                    "Content-Type":"application/json"
+                    "Content-Type": "application/json"
                 }
-            }else{
+                let finalHeader = Object.assign(headers, { "X-powered-by": "Node.js" })
+                response.writeHead(200, "resolve ok", finalHeader)
+                response.end(body)
+            } else {
                 // 每个请求逻辑  根据url进行分发
-              body = staticServer(url)
+                staticServer(url).then((body) => {
+                    let finalHeader = Object.assign(headers, { "X-powered-by": "Node.js" })
+                    response.writeHead(200, "resolve ok", finalHeader)
+                    response.end(body)
+                })
             }
-            let finalHeader = Object.assign(headers,{"X-powered-by":"Node.js"})
-            response.writeHead(200,"resolve ok",finalHeader)
-            response.end(body)
-            
         }
     }
 }

@@ -14,19 +14,20 @@ let getPath = (url) => {
 
 
 let staticFunc = (url) => {
-    if (url == "/") {
-        url = "/index.html"
-    }
-    let _path = getPath(url);
+    return new Promise((resolve, reject) => {
+        if (url == "/") {
+            url = "/index.html"
+        }
+        let _path = getPath(url);
 
-    let body = "";
-    try{
-        body = fs.readFileSync(_path)
-    }catch(err){
-        body = `not found ${err.stack}`
-    }
-    
-    return  body;
+        let body = "";
+        body = fs.readFile(_path, (err, data) => {
+            if (err) {
+                reject(`not found ${err.stack}`)
+            }
+            resolve(data)
+        })
+    });
 }
 
 module.exports = staticFunc;
