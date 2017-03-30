@@ -10,5 +10,5 @@ module.exports = (url)=>{
         "/user.action": ["白霁","凯文","霖荆"]
     }
 
-    return apiMap[url]
+    return Promise.resolve(apiMap[url])
 }

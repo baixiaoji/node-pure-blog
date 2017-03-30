@@ -13,6 +13,15 @@ let getPath = (url) => {
 }
 
 
+/**
+ *  1. 把代码变成 Primose
+ * 2. apiServer.then(()=>{
+ *  staticFunc()
+ * })
+ * 3. 自己实践promise的其他东西
+ */
+
+
 let staticFunc = (url) => {
     return new Promise((resolve, reject) => {
         if (url == "/") {
