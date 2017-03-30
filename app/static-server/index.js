@@ -20,8 +20,7 @@ let staticFunc = (url) => {
         }
         let _path = getPath(url);
 
-        let body = "";
-        body = fs.readFile(_path, (err, data) => {
+        let body = fs.readFile(_path, (err, data) => {
             if (err) {
                 reject(`not found ${err.stack}`)
             }
