@@ -3,6 +3,8 @@
 const fs = require("fs")
 const path = require("path")
 const staticServer = require("./static-server")
+
+const apiServer = require("./api")
 class App {
     constructor() {
 
@@ -12,10 +14,24 @@ class App {
         //高级函数返回
         return (request, response) => {
             let { url } = request;
-            // 根据 url 进行代码分发 
-           
-            let body = staticServer(url)
+            // 所有一action结尾的url，认为是ajax
+            // DRY
+            // 返回的字符串或buffer
+            let body = "";
+            let headers = {} ;
+            if(url.match("action")){
+                body = JSON.stringify( apiServer(url) )
+                headers = {
+                    "Content-Type":"application/json"
+                }
+            }else{
+                // 每个请求逻辑  根据url进行分发
+              body = staticServer(url)
+            }
+            let finalHeader = Object.assign(headers,{"X-powered-by":"Node.js"})
+            response.writeHead(200,"resolve ok",finalHeader)
             response.end(body)
+            
         }
     }
 }

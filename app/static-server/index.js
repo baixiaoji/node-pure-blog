@@ -3,7 +3,6 @@
  * 
  * @Author  baixiaoji
  * 静态资源服务器 
- * lesson3
  */
 
 const path = require("path")
