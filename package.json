@@ -1,0 +1,26 @@
+{
+  "name": "node-blog",
+  "version": "0.1.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon --inspect index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/baixiaoji/node-pure-blog.git"
+  },
+  "author": "baixiaoji",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/baixiaoji/node-pure-blog/issues"
+  },
+  "homepage": "https://github.com/baixiaoji/node-pure-blog#readme",
+  "dependencies": {
+    "axios": "^0.16.2"
+  },
+  "devDependencies": {
+    "lodash": "^4.17.4",
+    "nodemon": "^1.11.0"
+  }
+}
