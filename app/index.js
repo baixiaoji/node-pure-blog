@@ -14,7 +14,10 @@ class App {
 
             let body = staticServer(url)            
             // console.log(body)
-            response.end(body)
+            body.then((data)=>{
+               // console.log(data)
+                response.end(data)
+            })
         }
     }
 }
