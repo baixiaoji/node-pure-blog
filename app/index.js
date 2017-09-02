@@ -10,13 +10,13 @@ class App {
         return (request, response) => {
             let { url } = request
             
-            let staticPrefix =  path.resolve(process.cwd(),"public")
+            let getPath = (url) => path.resolve(process.cwd(),"public",`.${url}`)
             let staticFunc = (url) =>{
                 if(url === "/"){
                     url = "/index.html"
                 }
-                let _path = path.resolve(staticPrefix,`.${url}`)
-                console.log(staticPath,url)
+                let _path = getPath(url)
+                
                 fs.readFile(_path,(err,data)=>{
                     response.end(data)
                 })
