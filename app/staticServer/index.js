@@ -9,14 +9,13 @@ let staticFunc = (url) =>{
     }
     let _path = getPath(url)
 
+    let data = ""
     try{
-        fs.readFile(_path,(err,data)=>{
-           return data
-        })
+         data = fs.readFileSync(_path)
     }catch(err){
         data = `NOT FOUND ${err.stack}`
     }
-    
+    return data
 }
 
 module.exports = staticFunc
