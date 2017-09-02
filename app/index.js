@@ -1,5 +1,6 @@
 // 主程序入口
 const fs = require("fs")
+const path = require("path")
 class App {
     constructor() {
 
@@ -8,27 +9,19 @@ class App {
         // 初始化的工作
         return (request, response) => {
             let { url } = request
-            //console.log(request)
             
-            if(url === "/css/index.css"){
-                fs.readFile("./public/css/index.css","utf-8",(err,data)=>{
+            let staticPrefix =  path.resolve(process.cwd(),"public")
+            let staticFunc = (url) =>{
+                if(url === "/"){
+                    url = "/index.html"
+                }
+                let _path = path.resolve(staticPrefix,`.${url}`)
+                console.log(staticPath,url)
+                fs.readFile(_path,(err,data)=>{
                     response.end(data)
                 })
             }
-            if(url === "/js/index.js"){
-                fs.readFile("./public/js/index.js","utf-8",(err,data)=>{
-                    response.end(data)
-                })
-            }
-            if(url === "/"){
-                // 第一个参数是相对 nodeJS的启动目录而言  process.cwd()
-                // 每个请求都是走这里的回复
-                fs.readFile("./public/index.html", "utf-8", (err, data) => {
-                    response.end(data)
-                })
-            }
-                
-                
+            staticFunc(url)
         }
     }
 }
