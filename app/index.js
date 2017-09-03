@@ -11,31 +11,26 @@ class App {
         // 初始化的工作
         return (request, response) => {
             let { url } = request
-
-
+            // 返回的字符串或是buffer
+            let body = ""
+            let headers = {}
             if (url.match("action")) {
-                let body = apiServer(url)
-
-
-                response.writeHead(200, "resolve ok", 
-                { 
-                    "X-powered-by": "NodeJS",
-                    //发过去的数据，客服端会帮你做一次JSON.parse
+                body = JSON.stringify(apiServer(url))
+                headers = {
                     "Content-Type":"application/json"
-                 })
-                response.end(JSON.stringify(body))
-
+                }
+                let finalHeader = Object.assign(headers,{ "X-powered-by": "NodeJS" })
+                response.writeHead(200, "resolve ok",finalHeader)
+                response.end(body)
             } else {
-                let body = staticServer(url)
-
+                body = staticServer(url)
                 body.then((data) => {
-                    response.writeHead(200, "resolve ok", { "X-powered-by": "NodeJS" })
+                    let finalHeader = Object.assign(headers,{ "X-powered-by": "NodeJS" })
+                    response.writeHead(200, "resolve ok",finalHeader)
                     response.end(data)
-                }).catch((err) => {
-                    response.end(`NOT FOUND ${err.stack}`)
                 })
             }
-
+           
         }
     }
 }
