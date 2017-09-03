@@ -16,10 +16,15 @@ class App {
             if (url.match("action")) {
                 let body = apiServer(url)
 
-               
-                    response.writeHead(200, "resolve ok", { "X-powered-by": "NodeJS" })
-                    response.end(body)
-                
+
+                response.writeHead(200, "resolve ok", 
+                { 
+                    "X-powered-by": "NodeJS",
+                    //发过去的数据，客服端会帮你做一次JSON.parse
+                    "Content-Type":"application/json"
+                 })
+                response.end(JSON.stringify(body))
+
             } else {
                 let body = staticServer(url)
 

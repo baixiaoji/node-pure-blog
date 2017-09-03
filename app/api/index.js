@@ -4,5 +4,9 @@
 
  module.exports = (url) =>{
     // console.log(url) 
-    return "hello word the mask the build"
+    let apiMap = {
+        "/list.action":["衣服","书籍"],
+        "/user.action":["hello","world","zouzou"]
+    }
+    return  apiMap[url]
  }
