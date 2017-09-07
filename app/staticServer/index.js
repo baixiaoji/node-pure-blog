@@ -11,7 +11,7 @@ let staticFunc = (url) => {
         let _path = getPath(url)
         fs.readFile(_path, (err, data) => {
             if (err) {
-                reject(err)
+                resolve(`NOT FOUND ${err.stack}`)
             }
             resolve(data)
         })

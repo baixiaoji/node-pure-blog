@@ -12,24 +12,52 @@ class App {
         return (request, response) => {
             let { url } = request
             // 返回的字符串或是buffer
-            let body = ""
-            let headers = {}
-            if (url.match("action")) {
-                body = JSON.stringify(apiServer(url))
-                headers = {
-                    "Content-Type":"application/json"
+           
+            apiServer(url).then(val =>{
+                /**
+                 * return 
+                 *     1. ajax返回的数组对象
+                 *     2. underfined -> 走staticServer
+                 */
+                if(!val){
+                    // Promise
+                    return staticServer(url)
+                }else{
+                    return val
                 }
-                let finalHeader = Object.assign(headers,{ "X-powered-by": "NodeJS" })
-                response.writeHead(200, "resolve ok",finalHeader)
+            }).then(val =>{
+                let body = ""
+                // 数组
+                let base = { "X-powered-by": "NodeJS" }
+                if( val instanceof Buffer){
+                    body = val
+                }else{
+                    body = JSON.stringify(val)
+                     let finalHeader = Object.assign(base,{
+                         "Content-Type":"application/json"
+                     })
+                     response.writeHead(200, "resolve ok",finalHeader)
+                }
                 response.end(body)
-            } else {
-                body = staticServer(url)
-                body.then((data) => {
-                    let finalHeader = Object.assign(headers,{ "X-powered-by": "NodeJS" })
-                    response.writeHead(200, "resolve ok",finalHeader)
-                    response.end(data)
-                })
-            }
+            })
+            // if (url.match("action")) {
+            //     apiServer(url).then(val=>{
+            //         body = JSON.stringify(val)
+            //         headers = {
+            //             "Content-Type":"application/json"
+            //         }
+            //         let finalHeader = Object.assign(headers,{ "X-powered-by": "NodeJS" })
+            //         response.writeHead(200, "resolve ok",finalHeader)
+            //         response.end(body)
+            //     })
+            // } else {
+            //     body = staticServer(url)
+            //     body.then((data) => {
+            //         let finalHeader = Object.assign(headers,{ "X-powered-by": "NodeJS" })
+            //         response.writeHead(200, "resolve ok",finalHeader)
+            //         response.end(data)
+            //     })
+            // }
            
         }
     }
