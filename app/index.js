@@ -3,6 +3,7 @@ const fs = require("fs")
 const path = require("path")
 const staticServer = require("./staticServer")
 const apiServer = require("./api")
+const urlParser = require("./url-parser")
 class App {
     constructor() {
 
@@ -10,10 +11,17 @@ class App {
     initServer() {
         // 初始化的工作
         return (request, response) => {
-            let { url } = request
+            let { url,method } = request
             // 返回的字符串或是buffer
-           
-            apiServer(url).then(val =>{
+           request.context = {
+               body:'',
+               query:{},
+               method:"get"
+           }
+            // urlParser(request).then((val)=>{
+            //     return apiServer(request)
+            // })
+            apiServer(request).then(val =>{
                 /**
                  * return 
                  *     1. ajax返回的数组对象
@@ -21,7 +29,7 @@ class App {
                  */
                 if(!val){
                     // Promise
-                    return staticServer(url)
+                    return staticServer(request)
                 }else{
                     return val
                 }
@@ -40,25 +48,7 @@ class App {
                 }
                 response.end(body)
             })
-            // if (url.match("action")) {
-            //     apiServer(url).then(val=>{
-            //         body = JSON.stringify(val)
-            //         headers = {
-            //             "Content-Type":"application/json"
-            //         }
-            //         let finalHeader = Object.assign(headers,{ "X-powered-by": "NodeJS" })
-            //         response.writeHead(200, "resolve ok",finalHeader)
-            //         response.end(body)
-            //     })
-            // } else {
-            //     body = staticServer(url)
-            //     body.then((data) => {
-            //         let finalHeader = Object.assign(headers,{ "X-powered-by": "NodeJS" })
-            //         response.writeHead(200, "resolve ok",finalHeader)
-            //         response.end(data)
-            //     })
-            // }
-           
+            
         }
     }
 }
