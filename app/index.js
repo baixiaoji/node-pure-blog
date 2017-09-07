@@ -18,10 +18,9 @@ class App {
                query:{},
                method:"get"
            }
-            // urlParser(request).then((val)=>{
-            //     return apiServer(request)
-            // })
-            apiServer(request).then(val =>{
+            urlParser(request).then((val)=>{
+                return apiServer(request)
+            }).then(val =>{
                 /**
                  * return 
                  *     1. ajax返回的数组对象
@@ -48,6 +47,7 @@ class App {
                 }
                 response.end(body)
             })
+           // apiServer(request)
             
         }
     }
