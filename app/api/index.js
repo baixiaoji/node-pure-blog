@@ -2,19 +2,26 @@
  * api server
  */
 
- module.exports = (request) =>{
-    let { url,method ,context} = request
+module.exports = (ctx) => {
+    let { url, method } = ctx.req
+    let { resCtx, reqCtx } = ctx
     // console.log(url) 
     let apiMap = {
-        "/list.action":["衣服","书籍"],
-        "/user.action":["hello","world","zouzou"]
+        "/list.action": ["衣服", "书籍"],
+        "/user.action": ["hello", "world", "zouzou"]
     }
-    // 过滤method方法
-    if(method.toLowerCase() === "get"){
-        return Promise.resolve(apiMap[url])
-    }else{
-        let {body} = context
-       // 处理post B post --socket--> S
-       return Promise.resolve(body)
-    }
- }
+    return Promise.resolve({
+        then: (resolve, reject) => {
+            // 过滤method方法
+            if (method.toLowerCase() === "get") {
+                resCtx.body = apiMap[url]
+            } else {
+                let { body } = reqCtx
+                // 处理post B post --socket--> S
+                resCtx.body = body
+            }
+            resolve()
+        }
+    })
+
+}

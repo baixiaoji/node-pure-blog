@@ -11,44 +11,47 @@ class App {
     initServer() {
         // 初始化的工作
         return (request, response) => {
-            let { url,method } = request
+            let { url, method } = request
             // 返回的字符串或是buffer
-           request.context = {
-               body:'',
-               query:{},
-               method:"get"
-           }
-            urlParser(request).then((val)=>{
-                return apiServer(request)
-            }).then(val =>{
-                /**
-                 * return 
-                 *     1. ajax返回的数组对象
-                 *     2. underfined -> 走staticServer
-                 */
-                if(!val){
-                    // Promise
-                    return staticServer(request)
-                }else{
-                    return val
+            request.context = {
+                body: '',
+                query: {},
+                method: "get"
+            }
+            let context = {
+                req: request,
+                reqCtx: {
+                    body: '',//post请求的数据
+                    query: {},//处理客户端的get请求
+                },
+                res: response,
+                resCtx: {
+                    header: {},//response 的返回报文
+                    body: "",//返回前端的内容区
                 }
-            }).then(val =>{
-                let body = ""
+            }
+            // request + response
+            urlParser(context).then(() => {
+                return apiServer(context)
+            }).then(() => {
+                return staticServer(context)
+            }).then(() => {
+                let { body } = context.resCtx
                 // 数组
                 let base = { "X-powered-by": "NodeJS" }
-                if( val instanceof Buffer){
-                    body = val
-                }else{
-                    body = JSON.stringify(val)
-                     let finalHeader = Object.assign(base,{
-                         "Content-Type":"application/json"
-                     })
-                     response.writeHead(200, "resolve ok",finalHeader)
-                }
+                // if (val instanceof Buffer) {
+                //     body = val
+                // } else {
+                //     body = JSON.stringify(val)
+                //     let finalHeader = Object.assign(base, {
+                //         "Content-Type": "application/json"
+                //     })
+                //     response.writeHead(200, "resolve ok", finalHeader)
+                // }
                 response.end(body)
             })
-           // apiServer(request)
-            
+            // apiServer(request)
+
         }
     }
 }
