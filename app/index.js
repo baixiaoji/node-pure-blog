@@ -39,15 +39,8 @@ class App {
                 let { body } = context.resCtx
                 // 数组
                 let base = { "X-powered-by": "NodeJS" }
-                // if (val instanceof Buffer) {
-                //     body = val
-                // } else {
-                //     body = JSON.stringify(val)
-                //     let finalHeader = Object.assign(base, {
-                //         "Content-Type": "application/json"
-                //     })
-                //     response.writeHead(200, "resolve ok", finalHeader)
-                // }
+                
+                response.writeHead(200, "resolve ok", base)
                 response.end(body)
             })
             // apiServer(request)

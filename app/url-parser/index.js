@@ -17,7 +17,7 @@
                 //使用的stream request原型链上的
                 // readable stream eventEmitter
                 // paused flow 
-                request.on("data",(chunk)=>{
+                ctx.req.on("data",(chunk)=>{
                     data+= chunk
                 }).on("end",()=>{
                     // body

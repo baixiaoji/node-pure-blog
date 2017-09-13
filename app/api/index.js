@@ -5,6 +5,7 @@
 module.exports = (ctx) => {
     let { url, method } = ctx.req
     let { resCtx, reqCtx } = ctx
+    let {res} = ctx
     // console.log(url) 
     let apiMap = {
         "/list.action": ["衣服", "书籍"],
@@ -13,12 +14,15 @@ module.exports = (ctx) => {
     return Promise.resolve({
         then: (resolve, reject) => {
             // 过滤method方法
-            if (method.toLowerCase() === "get") {
-                resCtx.body = apiMap[url]
-            } else {
-                let { body } = reqCtx
-                // 处理post B post --socket--> S
-                resCtx.body = body
+            if(url.match("action")){
+                if (method.toLowerCase() === "get") {
+                    resCtx.body = JSON.stringify( apiMap[url])
+                } else {
+                    let { body } = reqCtx
+                    // 处理post B post --socket--> S
+                    resCtx.body = JSON.stringify(body)
+                }
+                res.setHeader("Content-Type","application/json")
             }
             resolve()
         }
