@@ -22,7 +22,9 @@ module.exports = (ctx) => {
                     // 处理post B post --socket--> S
                     resCtx.body = JSON.stringify(body)
                 }
-                res.setHeader("Content-Type","application/json")
+                resCtx.headers = Object.assign(resCtx.headers,{
+                    "Content-Type":"application/json"
+                })
             }
             resolve()
         }

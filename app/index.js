@@ -1,23 +1,32 @@
 // 主程序入口
 const fs = require("fs")
 const path = require("path")
-const staticServer = require("./staticServer")
-const apiServer = require("./api")
-const urlParser = require("./url-parser")
+
 class App {
     constructor() {
-
+        this.middlewaveArr = []
+        // 设计一个空的Promise
+        this.middlewaveChain = Promise.resolve()
+    }
+    use(middlewave) {
+        this.middlewaveArr.push(middlewave)
+    }
+    // 创建Promise链条
+    composeMiddlewave(context) {
+        let { middlewaveArr } = this
+        //根据中间件数组创建Promise链条  就是和之前做的差不多
+        for (let middlewave of middlewaveArr) {
+            this.middlewaveChain = this.middlewaveChain.then(() => {
+                return middlewave(context)
+            })
+        }
+        return this.middlewaveChain
     }
     initServer() {
         // 初始化的工作
         return (request, response) => {
             let { url, method } = request
             // 返回的字符串或是buffer
-            request.context = {
-                body: '',
-                query: {},
-                method: "get"
-            }
             let context = {
                 req: request,
                 reqCtx: {
@@ -26,21 +35,26 @@ class App {
                 },
                 res: response,
                 resCtx: {
-                    header: {},//response 的返回报文
+                    headers: {},//response 的返回报文
                     body: "",//返回前端的内容区
                 }
             }
             // request + response
-            urlParser(context).then(() => {
-                return apiServer(context)
-            }).then(() => {
-                return staticServer(context)
-            }).then(() => {
-                let { body } = context.resCtx
+            // Promise.resolve(参数) ===> 通过context对象来传递
+
+            //1. 每一个中间件只需要关注修改context对象即可，彼此独立
+            //2. 设计了use和composeMiddlewave这两个API用来的创建Promise链
+            // 3. 开发者可以专注于中间件开发
+
+            // 函数体可以百年不变
+            this.composeMiddlewave(context)
+            .then(() => {
+                let { body, headers } = context.resCtx
                 // 数组
                 let base = { "X-powered-by": "NodeJS" }
-                
-                response.writeHead(200, "resolve ok", base)
+                // writeHead status code  status message  header
+                // writeHead里面的header会覆盖setHeader里面的对应的key值
+                response.writeHead(200, "resolve ok", Object.assign(base, headers))
                 response.end(body)
             })
             // apiServer(request)
