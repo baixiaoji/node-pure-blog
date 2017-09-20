@@ -1,2 +1,3 @@
 
-require("./buffer.js")
+// require("./buffer.js")
+require("./ejs")

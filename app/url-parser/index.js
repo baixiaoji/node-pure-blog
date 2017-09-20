@@ -12,16 +12,17 @@
     return Promise.resolve({
         then:(resolve,reject)=>{
             if(method === "post"){
-                let data = ''
+                let data = []
                 // 可以获取到post请求的数据 
                 //使用的stream request原型链上的
                 // readable stream eventEmitter
                 // paused flow 
                 ctx.req.on("data",(chunk)=>{
-                    data+= chunk
+                    data.push(chunk)
                 }).on("end",()=>{
+                    let endData = Buffer.concat(data).toString()
                     // body
-                    reqCtx.body = JSON.parse(data)
+                    reqCtx.body = JSON.parse(endData)
                    resolve()
                 })
             }else{
