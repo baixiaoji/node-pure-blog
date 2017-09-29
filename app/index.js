@@ -35,6 +35,8 @@ class App {
                 },
                 res: response,
                 resCtx: {
+                    statusMessage:"resolve ok",
+                    statusCode:200, // 状态码
                     headers: {},//response 的返回报文
                     body: "",//返回前端的内容区
                 }
@@ -49,12 +51,12 @@ class App {
             // 函数体可以百年不变
             this.composeMiddlewave(context)
             .then(() => {
-                let { body, headers } = context.resCtx
+                let { body, headers,statusCode,statusMessage } = context.resCtx
                 // 数组
                 let base = { "X-powered-by": "NodeJS" }
                 // writeHead status code  status message  header
                 // writeHead里面的header会覆盖setHeader里面的对应的key值
-                response.writeHead(200, "resolve ok", Object.assign(base, headers))
+                response.writeHead(statusCode, statusMessage, Object.assign(base, headers))
                 response.end(body)
             })
             // apiServer(request)

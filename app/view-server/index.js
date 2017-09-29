@@ -30,7 +30,12 @@ module.exports = (ctx) => {
                     resolve()
                 }else{
                     //重定向的功能
-                    
+                    resCtx.headers = Object.assign(resCtx.headers,{
+                        "Location":'/'
+                    })
+                    resCtx.statusCode = 302 // status code
+                    resCtx.statusMessage = "redirect" // 重定向status Message
+                    resCtx.body = ""
                     resolve()
                 }
             }
