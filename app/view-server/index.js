@@ -21,8 +21,17 @@ module.exports = (ctx) => {
                 const viewPath = path.resolve(__dirname,"ejs")
                 let ejsName = urlrewriteMap[url]
                 if(ejsName){
-                    let htmlPath = path.resolve(viewPath,ejsName+".ejs")
-                    let html = fs.readFileSync(htmlPath,"utf8")
+                    let layoutPath = path.resolve(viewPath,"layout.ejs")
+                    let layoutHtml = fs.readFileSync(layoutPath,"utf8")
+                    // let htmlPath = path.resolve(viewPath,ejsName+".ejs")
+                    // let html = fs.readFileSync(htmlPath,"utf8")
+                    let render = ejs.compile(layoutHtml,{
+                        compileDebug:true,
+                        filename:layoutPath
+                    })
+
+                    let html = render({templateName:ejsName})
+                    
                     resCtx.headers = Object.assign(resCtx.headers,{
                         "Content-Type":"text/html"
                     })
